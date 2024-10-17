@@ -15,7 +15,7 @@ url = "https://bundes-klinik-atlas.de/krankenhaussuche/?searchtype=free-search"
 conn = sqlite3.connect("bk-a.db")
 c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS GERMAN_HOSPITALS
-                (dns_name text, ip_address text, name text, location text, cases integer, public boolean)""")
+                (dns_name text, ip_address text, name text, mail_domain text, location text, cases integer, public boolean)""")
 
 logger = logging.getLogger()
 logging.basicConfig(filename='./Logs/bk-a.log', level=logging.INFO,
