@@ -1,4 +1,5 @@
 import logging
+import os
 import sqlite3
 import urllib
 
@@ -12,7 +13,7 @@ import socket
 base_url = "https://klinikatlas.api.proxy.bund.dev"
 all_hospitals_url = "/fileadmin/json/locations.json"
 ip_info_url = "https://ipinfo.io/"
-ip_info_token = "?token=9eace5af0db3f1"
+ip_info_token = "?token=" + os.getenv('IPINFO_TOKEN')
 
 #SQLite Connection
 conn = sqlite3.connect("bk-a.db")
