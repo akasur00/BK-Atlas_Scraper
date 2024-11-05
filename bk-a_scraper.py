@@ -13,6 +13,7 @@ import socket
 base_url = "https://klinikatlas.api.proxy.bund.dev"
 all_hospitals_url = "/fileadmin/json/locations.json"
 ip_info_url = "https://ipinfo.io/"
+#Your API-Token for ipinfo.io
 ip_info_token = "?token=" + os.getenv('IPINFO_TOKEN')
 
 #SQLite Connection
