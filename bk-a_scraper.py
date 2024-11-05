@@ -7,9 +7,6 @@ import bs4
 import requests
 import socket
 
-#Add dnslookups from dns records
-#Add ip location of the webserver
-
 base_url = "https://klinikatlas.api.proxy.bund.dev"
 all_hospitals_url = "/fileadmin/json/locations.json"
 ip_info_url = "https://ipinfo.io/"
