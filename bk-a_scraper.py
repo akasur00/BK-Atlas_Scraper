@@ -23,9 +23,6 @@ logger = logging.getLogger()
 logging.basicConfig(filename='./Logs/bk-a.log', level=logging.INFO,
                     format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
-"""
-Script to get all information about german hospitals
-"""
 
 logger.info("<-- Script started -->")
 
@@ -65,7 +62,7 @@ for hospitals_data in hospitals_data:
         else:
             dnsname, ip_address, ip_region, ip_org = "NULL", "NULL", "NULL", "NULL"
 
-        cases = soup.find('div', {'class': 'c-tacho-text__text'}).text.split(' ')[0]
+        cases = soup.find('div', {'class': 'c-tacho-text__text'}).text.split(' ')[0] #TODO: save without point as integer
         maildomain = hospitals_data['mail'].split('@')[-1] if '@' in hospitals_data['mail'] else "NULL"
 
 
