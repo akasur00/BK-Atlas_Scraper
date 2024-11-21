@@ -1,7 +1,7 @@
 """
 Functions for the Bundesklinik Atlas API
 https://klinikatlas.bmg.api.bund.dev/
-No API Token is needed
+No API Token needed
 """
 
 import logging
@@ -12,14 +12,12 @@ base_url = "https://klinikatlas.api.proxy.bund.dev"
 all_hospitals_url = "/fileadmin/json/locations.json"
 
 logger = logging.getLogger()
-logging.basicConfig(filename='./Logs/bundesklinik-atlas.log', level=logging.INFO,
+logging.basicConfig(filename='./logs/bundesklinik-atlas.log', level=logging.INFO,
                     format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 def get_all_hospitals():
     """
     Get all hospitals from the Bundesklinik Atlas API
-    :param: base_url: basic URL of the API
-    :param: all_hospitals_url: part of the URL to get all hospitals
     :return: JSON with all hospitals
     Structure:
         [
@@ -38,9 +36,10 @@ def get_all_hospitals():
     """
     response = requests.get(base_url + all_hospitals_url)
     if response.status_code == 200:
-        logging.info(f"got {len(response.json())} hospitals from {base_url + all_hospitals_url}")
+        logger.info(f"got {len(response.json())} hospitals from {base_url + all_hospitals_url}")
         return response.json()
     else:
+        logger.error(f"Failed to get any hospitals from {base_url + all_hospitals_url}, statuscode {response.status_code}\n", exc_info=True)
         return None
 
 def get_individual_hospital(link):
@@ -51,8 +50,9 @@ def get_individual_hospital(link):
     """
     try:
         html = urllib.request.urlopen(link).read().decode("utf-8")
+        logger.info("got html for " + link)
         return html
     except Exception as e:
-        logging.error(f"Failed to get HTML for {link}\n", exc_info=True)
+        logger.error(f"Failed to get HTML for {link}\n", exc_info=True)
         return None
 
