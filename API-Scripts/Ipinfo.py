@@ -2,6 +2,7 @@
 Functions for the Ipinfo API
 https://ipinfo.io/
 API Token is needed (free version available with 50.000 requests per month)
+!!!Ask the German participants for a Token with ASN-Information!!!
 """
 
 import logging

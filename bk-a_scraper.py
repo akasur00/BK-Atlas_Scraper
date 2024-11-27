@@ -45,7 +45,7 @@ for hospitals_data in hospitals_data:
             dnsname = dns_element.text
             # Get IP Address for DNS
             try:
-                ip_address = socket.gethostbyname(dnsname)
+                ip_address = socket.gethostbyname(dnsname) #TODO: get MX record for mail server
             except Exception as e:
                 logger.error(f"Failed to get IP Address for {dnsname}\n", exc_info=True)
                 ip_address = "NULL"
