@@ -10,14 +10,14 @@ import requests
 base_url = "https://crt.sh/json?identity="
 
 logger = logging.getLogger()
-logging.basicConfig(filename='./logs/crt-sh.log', filemode='a', level=logging.INFO,
+logging.basicConfig(filename='./logs/crt-sh.log', filemode='', level=logging.INFO,
                     format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 def get_domains(domain):
     """
     Get all via certs related domains
-    :return: JSON with all domains
+    :return: JSON with all domains and info
     Structure:
         [
             {
@@ -40,4 +40,25 @@ def get_domains(domain):
     else:
         logger.error(f"Failed to get any returns from {base_url + domain}, statuscode {response.status_code}\n",
                      exc_info=True)
+        return None
+
+
+def only_domains(domain):
+    """
+        Get all via certs related domains
+        :return: JSON with all domains
+    Structure:
+        [
+            {
+                "common_name": Domain Name
+            }
+        ]
+    """
+    urls = []
+    response = get_domains(domain)
+    if response is not None:
+        for entry in response:
+            urls.append(entry["common_name"])
+        return urls
+    else:
         return None
