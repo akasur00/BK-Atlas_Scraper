@@ -1,20 +1,22 @@
+'''
+Starting Script to get a Database with the following Infos:
+    Structure:
+        name:               name of the Hospital
+        link:               link to the individual hospital web site
+        dns_record:         dns record, scraped from the individual site
+        dns_address:        ip address after dns lookup of the dns record
+        mx_hostname:        hostname of the mx lookup of the dns record
+        mx_address:         ip address after dns lookup of the hostname
+        mail_domain:        domain of the mail address
+        mail_domain_address:ip address after dns lookup of the mail domain
+        hospital_location:  location of the hospital from the API
+'''
+
 import sqlite3
 import urllib.request
 import bs4
 import api_scripts.bundesklinikatlas
 import lookups
-
-'''
-Start Script to get a Database with the following Infos:
-    Structure:
-        name:               name of the Hospital
-        link:               link to the individual hospital web site
-        dns_record:         dns record, scraped from the individual site 
-        dns_address:        ip address after dns lookup of the dns record
-        mx_hostname:        hostname of the mx lookup of the dns record
-        mx_address:         ip address after dns lookup of the hostname
-        hospital_location:  location of the hospital from the API
-'''
 
 #SQLite Connection
 conn = sqlite3.connect("bk-a.db")
