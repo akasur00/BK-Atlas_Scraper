@@ -26,9 +26,9 @@ c.execute("""CREATE TABLE IF NOT EXISTS GERMAN_HOSPITALS
 
 #Get all hospitals as JSON from the Bundesklinik Atlas API
 hospitals_json = api_scripts.bundesklinikatlas.get_all_hospitals()
+print (len(hospitals_json))
 
 #Main Loop to get further information and save it to the database
-#hospitals_json = hospitals_json[:10] #Limit to 10 for testing
 for hospital in hospitals_json:
 
     #Scrape information from individual Website
@@ -57,12 +57,14 @@ for hospital in hospitals_json:
             dns_record, dns_address, mx_hostname, mx_address = None, None, None, None
 
         #get the Mail Domain from the Website
-        mail_domain = hospital['mail'].split('@')[-1] if '@' in hospital['mail'] else None
-
-        if mail_domain is not None:
-            mail_domain_address = lookups.dns_lookup(mail_domain)
-        else:
-            mail_domain_address = None
+        try:
+            mail_domain = hospital['mail'].split('@')[-1] if '@' in hospital['mail'] else None
+            if mail_domain is not None:
+                mail_domain_address = lookups.dns_lookup(mail_domain)
+            else:
+                mail_domain_address = None
+        except Exception as e:
+            mail_domain, mail_domain_address = None, None
 
         #Save information to database
         c.execute("INSERT INTO GERMAN_HOSPITALS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
