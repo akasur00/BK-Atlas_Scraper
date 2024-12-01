@@ -1,17 +1,12 @@
-import logging
 import os
 import sqlite3
-import urllib
+import urllib.request
 
 import bs4
 import requests
 import socket
 
-base_url = "https://klinikatlas.api.proxy.bund.dev"
-all_hospitals_url = "/fileadmin/json/locations.json"
-ip_info_url = "https://ipinfo.io/"
-#Your API-Token for ipinfo.io
-ip_info_token = "?token=" + os.getenv('IPINFO_TOKEN')
+import api_scripts.Ipinfo, api_scripts.bundesklinikatlas
 
 #SQLite Connection
 conn = sqlite3.connect("bk-a.db")
@@ -19,22 +14,22 @@ c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS GERMAN_HOSPITALS
                 (name text, dns_name text, ip_address text, ip_location text, ip_region text, ip_org text, mail_domain text, hospital_location text, cases integer)""")
 
-#Get all hospitals as JSON
-response = requests.get(base_url + all_hospitals_url)
-hospitals_data = response.json()
+#Get all hospitals as JSON from the Bundesklinik Atlas API
+hospitals_json = api_scripts.bundesklinikatlas.get_all_hospitals()
 
-#Main Loop to get all information
-#hospitals_data = hospitals_data[:10] #Limit to 10 for testing
-for hospitals_data in hospitals_data:
+#Main Loop to get further information and save it to the database
+hospitals_json = hospitals_json[:10] #Limit to 10 for testing
+for hospital in hospitals_json:
+
+    #Scrape information from individual Website
     try:
-        #Request HTML Page for DNS Name and number of cases
-        html = urllib.request.urlopen(hospitals_data['link']).read().decode("utf-8")
+        html = urllib.request.urlopen(hospital['link']).read().decode("utf-8")
         soup = bs4.BeautifulSoup(html, 'html.parser')
         dns_element = soup.find('a', {'class': 'u-icon--icon-link-extern'})
 
+        #If Dns Element is found, resolve to AAAA Record and MX Record
         if dns_element is not None:
-            dnsname = dns_element.text
-            # Get IP Address for DNS
+            dns_name = dns_element.text
             try:
                 ip_address = socket.gethostbyname(dnsname) #TODO: get MX record for mail server
             except Exception as e:
