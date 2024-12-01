@@ -11,14 +11,16 @@ import requests
 
 ip_info_url = "https://ipinfo.io/"
 #Your API-Token for ipinfo.io
-ip_info_token = "?token=" + os.getenv('IPINFO_TOKEN')
-"""
-On Linux/Mac:
-export IPINFO_TOKEN="your_token"
-On Windows:
-set IPINFO_TOKEN="your_token"
-"""
-
+try:
+    ip_info_token = "?token=" + os.getenv('IPINFO_TOKEN')
+except Exception as e:
+    ip_info_token = ""
+    print("No Token found. Please set the IPINFO_TOKEN Environment Variable")
+    print("On Linux/Mac:")
+    print("export IPINFO_TOKEN=\"your_token\"")
+    print("On Windows:")
+    print("set IPINFO_TOKEN=\"your_token\"")
+    print("")
 
 def get_ip_info(ip_address):
     """
@@ -49,5 +51,3 @@ def get_ip_info(ip_address):
         return response.json()
     else:
         return None
-
-print (get_ip_info("1.1.1.1"))
