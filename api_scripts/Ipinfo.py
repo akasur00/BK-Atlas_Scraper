@@ -49,3 +49,5 @@ def get_ip_info(ip_address):
         return response.json()
     else:
         return None
+
+print (get_ip_info("1.1.1.1"))

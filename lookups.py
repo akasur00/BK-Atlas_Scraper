@@ -15,16 +15,14 @@ def dns_lookup(dns_record):
     except Exception as e:
         return None
 
-def mx_lookup(mx_record):
+def mx_lookup(dns_record):
     """
-    Get the hostname for a mx record
-    :param mx_record: mx record to get the hostname for
-    :return: hostname of the mx record
+    Get the hostname from an mx-lookup of a dns-record
+    :param dns_record: dns_record to get the hostname for
+    :return: hostname
     """
     try:
-        mx_hostname = dns.resolver.resolve(mx_record, 'MX')
+        mx_hostname = dns.resolver.resolve(dns_record, 'MX')
         return str(mx_hostname[0].exchange)
     except Exception as e:
         return None
-
-print (dns_lookup('hotmail.com'))
