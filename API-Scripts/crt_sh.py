@@ -9,10 +9,6 @@ import requests
 
 base_url = "https://crt.sh/json?identity="
 
-logger = logging.getLogger()
-logging.basicConfig(filename='./logs/crt-sh.log', filemode='', level=logging.INFO,
-                    format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-
 
 def get_domains(domain):
     """
@@ -35,11 +31,8 @@ def get_domains(domain):
         ]"""
     response = requests.get(base_url + domain)
     if response.status_code == 200:
-        logger.info(f"got {len(response.json())} returns from {base_url + domain}")
         return response.json()
     else:
-        logger.error(f"Failed to get any returns from {base_url + domain}, statuscode {response.status_code}\n",
-                     exc_info=True)
         return None
 
 
