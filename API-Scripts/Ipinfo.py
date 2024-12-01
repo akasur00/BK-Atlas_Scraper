@@ -5,14 +5,9 @@ API Token is needed (free version available with 50.000 requests per month)
 !!!Ask the German participants for a Token with ASN-Information!!!
 """
 
-import logging
 import os
 import requests
 
-
-logger = logging.getLogger()
-logging.basicConfig(filename='./logs/ipinfo.log', level=logging.INFO,
-                    format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 ip_info_url = "https://ipinfo.io/"
 #Your API-Token for ipinfo.io
@@ -51,8 +46,6 @@ def get_ip_info(ip_address):
     """
     response = requests.get(ip_info_url + ip_address + ip_info_token)
     if response.status_code == 200:
-        logger.info(f"got IP information for {ip_address}")
         return response.json()
     else:
-        logger.error(f"Failed to get IP information for {ip_address}, statuscode {response.status_code}\n", exc_info=True)
         return None
