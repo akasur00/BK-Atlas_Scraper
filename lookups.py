@@ -1,13 +1,7 @@
 """
 Useful functions for looking up information
 """
-import socket
-
 import dns.resolver
-
-#TODO implement the lookup-functions
-
-
 
 def dns_lookup(dns_record):
     """
@@ -16,8 +10,8 @@ def dns_lookup(dns_record):
     :return: IP Address of the DNS Record
     """
     try:
-        ip_address = socket.gethostbyname(dns_record)
-        return ip_address
+        ip_address = dns.resolver.resolve(dns_record, 'A')
+        return str(ip_address[0])
     except Exception as e:
         return None
 
@@ -32,3 +26,5 @@ def mx_lookup(mx_record):
         return str(mx_hostname[0].exchange)
     except Exception as e:
         return None
+
+print (dns_lookup('hotmail.com'))
