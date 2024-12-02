@@ -1,7 +1,8 @@
 """
 Useful functions for looking up information
 """
-import dns.resolver
+import dns.resolver     # Package dnspython
+
 
 def dns_lookup(dns_record):
     """
@@ -14,6 +15,7 @@ def dns_lookup(dns_record):
         return str(ip_address[0])
     except Exception as e:
         return None
+
 
 def mx_lookup(dns_record):
     """
