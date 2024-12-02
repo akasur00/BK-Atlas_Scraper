@@ -22,13 +22,13 @@ import lookups
 conn = sqlite3.connect("bk-a.db")
 c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS GERMAN_HOSPITALS
-                (name text, link text, dns_record text, dns_address text, mx_hostname text, mx_address text, mail_domain text, mail_domain_address text, hospital_location text)""")
+                (name text, link text, dns_record text UNIQUE , dns_address text, mx_hostname text, mx_address text,
+                 mail_domain text UNIQUE, mail_domain_address text, hospital_location text)""")
 
 #Get all hospitals as JSON from the Bundesklinik Atlas API
 hospitals_json = api_scripts.bundesklinikatlas.get_all_hospitals()
-print (len(hospitals_json))
 
-#Main Loop to get further information and save it to the database
+#Main Loop to get domain and mail information
 for hospital in hospitals_json:
 
     #Scrape information from individual Website
@@ -66,8 +66,11 @@ for hospital in hospitals_json:
         except Exception as e:
             mail_domain, mail_domain_address = None, None
 
+        #If no DNS Record and Mail Domain is found, skip the hospital
+        if mail_domain is None and dns_record is None:
+            continue
         #Save information to database
-        c.execute("INSERT INTO GERMAN_HOSPITALS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        c.execute("INSERT INTO GERMAN_HOSPITALS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) on conflict do nothing",
                   (hospital['name'], hospital['link'], dns_record, dns_address, mx_hostname, mx_address, mail_domain, mail_domain_address, hospital['city']))
         conn.commit()
 
