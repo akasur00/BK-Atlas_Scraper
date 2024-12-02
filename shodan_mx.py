@@ -8,7 +8,7 @@ import sqlite3
 import requests
 
 shodan_base_url = "https://api.shodan.io/shodan/host/"
-shodan_api_token = "?key=" + "2qnS9XmgmmGTNiOP39l5k3fzxPaLHwwy"
+shodan_api_token = "?key=" + os.getenv('SHODAN_API_TOKEN')
 
 #SQLite Connection
 conn = sqlite3.connect("bk-a.db")
